@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        ul {
+            list-style: none;
+            margin-top: 20px;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .update-btn {
+            background-color: #0275d8;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .update-btn:hover {
+            background-color: #025aa5;
+        }
+
+        .delete-btn {
+            background-color: #d9534f;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #c9302c;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+</head>
+<body>
+<div class="container">
+    <h1>Product Management</h1>
+
+    <!-- Form for adding a new product -->
+    <form action="{% url 'product-add' %}" method="POST" class="input-section">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Product Name" required>
+        <input type="text" name="image" placeholder="Image URL" required>
+        <input type="number" name="price" placeholder="Price" required>
+        <input type="number" name="discount" placeholder="Discount" required>
+        <button type="submit">Add Product</button>
+    </form>
+
+    <!-- Product list -->
+    <ul id="product-list">
+        {% for product in products %}
+            <li>
+                <form action="{% url 'product-update' product.pk %}" method="POST" style="display: flex; flex: 1;">
+                    {% csrf_token %}
+                    <input type="text" name="name" value="{{ product.name }}" required>
+                    <input type="text" name="image" value="{{ product.image }}" required>
+                    <input type="number" name="price" value="{{ product.price }}" required>
+                    <input type="number" name="discount" value="{{ product.discount }}" required>
+                    <button type="submit" class="update-btn">Update</button>
+                </form>
+                <form action="{% url 'product-delete' product.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>
